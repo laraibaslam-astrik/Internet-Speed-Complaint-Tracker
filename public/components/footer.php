@@ -52,13 +52,25 @@
 // Pakistan Map Visualization
 document.addEventListener('DOMContentLoaded', function() {
     const canvas = document.getElementById('pakistan-map');
-    if (!canvas) return;
+    if (!canvas) {
+        console.log('Canvas element not found');
+        return;
+    }
     
     const ctx = canvas.getContext('2d');
     
-    // Set canvas size
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    // Get container dimensions
+    const container = document.getElementById('map-container');
+    if (!container) {
+        console.log('Map container not found');
+        return;
+    }
+    
+    // Set canvas size to match container
+    canvas.width = container.offsetWidth;
+    canvas.height = container.offsetHeight;
+    
+    console.log('Canvas initialized:', canvas.width, 'x', canvas.height);
     
     // Major Pakistan cities with approximate coordinates
     const cities = [
@@ -91,15 +103,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     
     function drawMap(cityData) {
+        // Ensure canvas has size
+        if (canvas.width === 0 || canvas.height === 0) {
+            canvas.width = container.offsetWidth || 800;
+            canvas.height = container.offsetHeight || 450;
+        }
+        
+        console.log('Drawing map with', cityData.length, 'cities');
+        
         // Clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // Draw Pakistan outline (simplified)
-        ctx.fillStyle = '#e5e7eb';
+        // Draw Pakistan outline (simplified) - more visible
+        ctx.fillStyle = '#e0e7ff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // Draw background
-        ctx.fillStyle = '#f3f4f6';
+        // Draw Pakistan shape background
+        ctx.fillStyle = '#c7d2fe';
+        ctx.strokeStyle = '#818cf8';
+        ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(canvas.width * 0.60, canvas.height * 0.10);
         ctx.lineTo(canvas.width * 0.80, canvas.height * 0.20);
@@ -111,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.lineTo(canvas.width * 0.58, canvas.height * 0.30);
         ctx.closePath();
         ctx.fill();
+        ctx.stroke();
         
         // Draw cities as bubbles
         cityData.forEach(city => {
@@ -175,15 +198,37 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-            // Re-fetch and redraw
-            fetch('/api/map-data.php')
-                .then(r => r.json())
-                .then(data => drawMap(data.cities || cities))
-                .catch(() => drawMap(cities));
+            const newWidth = container.offsetWidth;
+            const newHeight = container.offsetHeight;
+            
+            if (newWidth > 0 && newHeight > 0) {
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                
+                // Re-fetch and redraw
+                fetch('/api/map-data.php')
+                    .then(r => r.json())
+                    .then(data => {
+                        console.log('Map data refreshed after resize');
+                        drawMap(data.cities && data.cities.length > 0 ? data.cities : cities);
+                    })
+                    .catch((e) => {
+                        console.log('Using fallback cities after resize');
+                        drawMap(cities);
+                    });
+            }
         }, 250);
     });
+    
+    // Force initial draw after slight delay to ensure DOM is ready
+    setTimeout(() => {
+        if (canvas.width === 0 || canvas.height === 0) {
+            canvas.width = container.offsetWidth || 800;
+            canvas.height = container.offsetHeight || 450;
+            console.log('Force redraw with dimensions:', canvas.width, 'x', canvas.height);
+            drawMap(cities);
+        }
+    }, 500);
 });
 
 // =====================================================

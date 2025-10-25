@@ -460,6 +460,89 @@
         h1, h2, h3, h4, h5, h6 {
             color: #111827 !important;
         }
+        
+        /* Mobile Responsiveness Improvements */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            /* Smaller heading on mobile */
+            h1 {
+                font-size: 1.75rem !important;
+            }
+            
+            h2, h3 {
+                font-size: 1.5rem !important;
+            }
+            
+            /* Stack metric cards vertically */
+            .row.g-3 {
+                gap: 0.75rem !important;
+            }
+            
+            /* Better card spacing */
+            .card {
+                margin-bottom: 1rem;
+            }
+            
+            /* Smaller display numbers */
+            .display-4 {
+                font-size: 2rem !important;
+            }
+            
+            /* Better table on mobile */
+            .table {
+                font-size: 0.85rem;
+            }
+            
+            .table td, .table th {
+                padding: 0.5rem;
+            }
+            
+            /* Map container mobile fix */
+            #map-container {
+                height: 300px !important;
+                min-height: 300px;
+            }
+            
+            /* Navbar adjustments */
+            .navbar-brand {
+                font-size: 0.95rem;
+            }
+            
+            /* Button sizing */
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            /* Even smaller screens */
+            .display-4 {
+                font-size: 1.5rem !important;
+            }
+            
+            h1 {
+                font-size: 1.5rem !important;
+            }
+            
+            h2, h3 {
+                font-size: 1.25rem !important;
+            }
+            
+            /* Single column layout */
+            .col-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+            
+            #map-container {
+                height: 250px !important;
+            }
+        }
     </style>
 </head>
 <body>
