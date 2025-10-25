@@ -430,13 +430,32 @@
             color: #d97706 !important;
         }
         
-        /* Better text contrast */
+        /* Better text contrast - Enhanced */
         .text-muted {
-            color: #6b7280 !important;
+            color: #4b5563 !important;
+            font-weight: 500 !important;
         }
         
         strong, .fw-bold {
-            color: #1f2937 !important;
+            color: #111827 !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Metric numbers - High visibility */
+        .display-4 {
+            color: #111827 !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        /* Card text */
+        .card-body .small {
+            color: #374151 !important;
+            font-weight: 600 !important;
+        }
+        
+        /* Ensure all important text is readable */
+        h1, h2, h3, h4, h5, h6 {
+            color: #111827 !important;
         }
     </style>
 </head>
