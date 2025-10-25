@@ -33,7 +33,3 @@ temp/
 *.bak
 *~
 *.backup
-
-# Test files
-test_*.php
-debug_*.php
