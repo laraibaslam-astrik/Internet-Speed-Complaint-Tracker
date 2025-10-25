@@ -1,0 +1,42 @@
+# Environment configuration
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+/var/log/
+
+# Database
+*.sql.gz
+*.sql.backup
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# PHP
+vendor/
+composer.lock
+
+# Cache
+cache/
+tmp/
+temp/
+
+# Backup files
+*.bak
+*~
+*.backup
+
+# Test files
+test_*.php
+debug_*.php
