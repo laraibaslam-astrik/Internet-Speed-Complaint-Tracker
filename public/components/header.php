@@ -1,25 +1,34 @@
 <!-- Header Component -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/">
-            <i class="bi bi-speedometer2 me-2"></i>
-            <span data-en="Pakistan Internet Speed Tracker" data-ur="پاکستان انٹرنیٹ رفتار ٹریکر">Pakistan Internet Speed Tracker</span>
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+            <div class="me-2" style="font-size: 1.75rem; animation: pulse 2s ease-in-out infinite;">
+                <i class="bi bi-speedometer2"></i>
+            </div>
+            <div>
+                <div style="font-size: 1.1rem; line-height: 1.2;">
+                    <span data-en="Pakistan Speed Tracker" data-ur="پاکستان رفتار ٹریکر">Pakistan Speed Tracker</span>
+                </div>
+                <div style="font-size: 0.65rem; opacity: 0.8; font-weight: 400; letter-spacing: 2px;">
+                    <span data-en="REAL-TIME MONITORING" data-ur="حقیقی وقت کی نگرانی">REAL-TIME MONITORING</span>
+                </div>
+            </div>
         </a>
         
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2">
             <!-- Language Toggle -->
-            <div class="btn-group btn-group-sm" role="group" aria-label="Language toggle">
-                <button type="button" class="btn btn-outline-light active" id="btn-lang-en" onclick="setLanguage('en')" aria-label="English">
-                    EN
+            <div class="btn-group btn-group-sm" role="group" aria-label="Language toggle" style="border-radius: 50px; overflow: hidden;">
+                <button type="button" class="btn btn-outline-light active" id="btn-lang-en" onclick="setLanguage('en')" aria-label="English" style="border-radius: 50px 0 0 50px; min-width: 45px;">
+                    🇬🇧
                 </button>
-                <button type="button" class="btn btn-outline-light" id="btn-lang-ur" onclick="setLanguage('ur')" aria-label="اردو">
-                    UR
+                <button type="button" class="btn btn-outline-light" id="btn-lang-ur" onclick="setLanguage('ur')" aria-label="اردو" style="border-radius: 0 50px 50px 0; min-width: 45px;">
+                    🇵🇰
                 </button>
             </div>
             
             <!-- Start Test Button -->
-            <button class="btn btn-warning fw-bold" id="btn-start-test" onclick="startSpeedTest()" aria-label="Start speed test">
-                <i class="bi bi-play-fill me-1"></i>
+            <button class="btn btn-warning fw-bold shadow-lg" id="btn-start-test" onclick="startSpeedTest()" aria-label="Start speed test" style="position: relative; z-index: 1;">
+                <i class="bi bi-lightning-charge-fill me-1"></i>
                 <span data-en="Start Test" data-ur="ٹیسٹ شروع کریں">Start Test</span>
             </button>
         </div>
