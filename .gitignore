@@ -1,7 +1,4 @@
-# Environment configuration
-.env
-.env.*
-!.env.example
+
 
 # Logs
 *.log
