@@ -16,20 +16,36 @@
                 <div class="d-flex gap-3">
                     <a href="#" class="text-light text-decoration-none small">
                         <span data-en="Privacy Policy" data-ur="رازداری کی پالیسی">Privacy Policy</span>
-                    </a>
-                    <a href="#" class="text-light text-decoration-none small">
-                        <span data-en="Terms of Service" data-ur="خدمات کی شرائط">Terms of Service</span>
-                    </a>
-                </div>
             </div>
-            <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                <p class="small mb-2">
-                    <span data-en="Made for Pakistan 🇵🇰" data-ur="پاکستان کے لیے بنایا گیا 🇵🇰">Made for Pakistan 🇵🇰</span>
-                </p>
-                <p class="small text-light-emphasis mb-0">
-                    © <?php echo date('Y'); ?> Pakistan Internet Speed Tracker
-                </p>
+            <div class="col-md-4 mb-3">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled small">
+                    <li><a href="/" class="text-white-50 text-decoration-none">Speed Test</a></li>
+                    <li><a href="#map-container" class="text-white-50 text-decoration-none">Pakistan Map</a></li>
+                    <li><a href="#leaderboard" class="text-white-50 text-decoration-none">ISP Leaderboard</a></li>
+                </ul>
             </div>
+            <div class="col-md-4 mb-3">
+                <h5>Popular ISPs</h5>
+                <ul class="list-unstyled small">
+                    <li class="text-white-50">PTCL</li>
+                    <li class="text-white-50">Nayatel</li>
+                    <li class="text-white-50">StormFiber</li>
+                    <li class="text-white-50">Optix</li>
+                </ul>
+            </div>
+        </div>
+        <hr style="border-color: rgba(255,255,255,0.1);">
+        <div class="text-center">
+            <p class="mb-2">
+                <span data-en="Made for Pakistan " data-ur="پاکستان کے لیے بنایا گیا ">Made for Pakistan </span>
+            </p>
+            <p class="small mb-0" style="color: rgba(255,255,255,0.7);">
+                <span data-en=" 2025 Pakistan Internet Speed Tracker. All rights reserved." data-ur=" 2025 پاکستان انٹرنیٹ رفتار ٹریکر۔ تمام حقوق محفوظ ہیں۔"> 2025 Pakistan Internet Speed Tracker. All rights reserved.</span>
+            </p>
+            <p class="small mt-2" style="color: rgba(255,255,255,0.5);">
+                Keywords: Pakistan speed test, PTCL speed test, Nayatel speed test, StormFiber, Internet speed Karachi, Lahore, Islamabad
+            </p>
         </div>
     </div>
 </footer>

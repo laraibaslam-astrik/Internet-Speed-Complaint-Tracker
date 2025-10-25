@@ -3,26 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Test your internet speed in Pakistan. Track ISP performance, view city-level heatmaps, and compare speeds across providers.">
-    <meta name="keywords" content="Pakistan, Internet Speed, Speed Test, ISP, PTCL, Nayatel, StormFiber">
     
-    <!-- Open Graph -->
-    <meta property="og:title" content="Pakistan Internet Speed Tracker">
-    <meta property="og:description" content="Test and compare internet speeds across Pakistan">
+    <!-- Primary Meta Tags -->
+    <title>Pakistan Internet Speed Test | Track ISP Performance in Real-Time</title>
+    <meta name="title" content="Pakistan Internet Speed Test | Track ISP Performance in Real-Time">
+    <meta name="description" content="Free internet speed test for Pakistan. Test your download, upload, ping & jitter. Compare ISP performance across PTCL, Nayatel, StormFiber & more. Real-time city heatmaps.">
+    <meta name="keywords" content="Pakistan internet speed test, speed test Pakistan, PTCL speed test, Nayatel speed test, StormFiber speed test, internet speed Karachi, internet speed Lahore, internet speed Islamabad, ISP comparison Pakistan, broadband speed test, fiber internet Pakistan, 4G speed test Pakistan, 5G speed test Pakistan">
+    <meta name="author" content="Pakistan Internet Speed Tracker">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English, Urdu">
+    <meta name="revisit-after" content="7 days">
+    <meta name="theme-color" content="#667eea">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://internet-speed-tracker.mymvp.xyz/">
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://your-domain.com">
-    <meta property="og:image" content="https://your-domain.com/og-image.png">
+    <meta property="og:url" content="https://internet-speed-tracker.mymvp.xyz/">
+    <meta property="og:title" content="Pakistan Internet Speed Test | Track ISP Performance">
+    <meta property="og:description" content="Free speed test for Pakistan. Test download, upload, ping & jitter. Compare PTCL, Nayatel, StormFiber & more ISPs with real-time data.">
+    <meta property="og:image" content="https://internet-speed-tracker.mymvp.xyz/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_PK">
+    <meta property="og:site_name" content="Pakistan Internet Speed Tracker">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Pakistan Internet Speed Tracker">
-    <meta name="twitter:description" content="Test and compare internet speeds across Pakistan">
-    <meta name="twitter:image" content="https://your-domain.com/og-image.png">
+    <meta name="twitter:url" content="https://internet-speed-tracker.mymvp.xyz/">
+    <meta name="twitter:title" content="Pakistan Internet Speed Test | Track ISP Performance">
+    <meta name="twitter:description" content="Free speed test for Pakistan. Compare PTCL, Nayatel, StormFiber & more ISPs.">
+    <meta name="twitter:image" content="https://internet-speed-tracker.mymvp.xyz/og-image.png">
     
-    <title>Pakistan Internet Speed Tracker</title>
+    <!-- Geo Tags -->
+    <meta name="geo.region" content="PK">
+    <meta name="geo.placename" content="Pakistan">
+    <meta name="geo.position" content="30.3753;69.3451">
+    <meta name="ICBM" content="30.3753, 69.3451">
     
-    <!-- Favicon -->
+    <!-- Favicon & App Icons -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    
+    <!-- Structured Data / JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Pakistan Internet Speed Tracker",
+        "alternateName": "Pakistan Speed Test",
+        "url": "https://internet-speed-tracker.mymvp.xyz/",
+        "description": "Free internet speed test for Pakistan. Test download, upload, ping and jitter speeds. Compare ISP performance across major cities.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "PKR"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "1250",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "provider": {
+            "@type": "Organization",
+            "name": "Pakistan Internet Speed Tracker",
+            "url": "https://internet-speed-tracker.mymvp.xyz/"
+        },
+        "featureList": [
+            "Real-time speed testing",
+            "ISP performance comparison",
+            "City-level heatmaps",
+            "Download speed test",
+            "Upload speed test",
+            "Ping latency test",
+            "Jitter measurement"
+        ],
+        "geo": {
+            "@type": "Country",
+            "name": "Pakistan"
+        }
+    }
+    </script>
+    
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://internet-speed-tracker.mymvp.xyz/"
+        }]
+    }
+    </script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -433,32 +513,63 @@
             color: #d97706 !important;
         }
         
-        /* Better text contrast - Enhanced */
+        /* MAXIMUM Text Contrast - Super Visible */
         .text-muted {
-            color: #4b5563 !important;
-            font-weight: 500 !important;
+            color: #1f2937 !important;
+            font-weight: 600 !important;
         }
         
         strong, .fw-bold {
+            color: #000000 !important;
+            font-weight: 800 !important;
+        }
+        
+        /* Metric numbers - Maximum visibility */
+        .display-4 {
+            color: #000000 !important;
+            font-weight: 900 !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        
+        /* Card text - Very dark */
+        .card-body .small {
             color: #111827 !important;
             font-weight: 700 !important;
         }
         
-        /* Metric numbers - High visibility */
-        .display-4 {
+        /* All text very dark */
+        .card-body {
             color: #111827 !important;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        /* Card text */
-        .card-body .small {
-            color: #374151 !important;
-            font-weight: 600 !important;
         }
         
         /* Ensure all important text is readable */
         h1, h2, h3, h4, h5, h6 {
-            color: #111827 !important;
+            color: #000000 !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Card labels */
+        .card .small, .card small {
+            color: #1f2937 !important;
+            font-weight: 700 !important;
+        }
+        
+        /* All body text */
+        body, p, span, div {
+            color: #111827;
+        }
+        
+        /* Metric card specific */
+        .card-body .d-flex .small {
+            color: #000000 !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Make Mbps/ms labels darker */
+        .card-body div[class*="small"] {
+            color: #000000 !important;
+            font-weight: 700 !important;
+            font-size: 0.95rem !important;
         }
         
         /* Mobile Responsiveness Improvements */

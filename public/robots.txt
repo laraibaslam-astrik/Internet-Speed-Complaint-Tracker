@@ -1,14 +1,42 @@
+# Robots.txt for Pakistan Internet Speed Tracker
+# Updated: 2025-10-25
+
 User-agent: *
 Allow: /
+Allow: /index.php
+Allow: /sitemap.xml
+Allow: /robots.txt
 
-# Sitemap
-Sitemap: https://internet-speed-tracker.mymvp.xyz/sitemap.xml
-
-# Disallow admin area
+# Disallow admin and internal areas
 Disallow: /admin/
 Disallow: /api/
 Disallow: /lib/
 Disallow: /components/
+Disallow: /test_*.php
+Disallow: /*.sql$
 
-# Crawl-delay
+# Specific bot rules
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0.5
+
+User-agent: Bingbot
+Allow: /
 Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+# Sitemaps
+Sitemap: https://internet-speed-tracker.mymvp.xyz/sitemap.xml
+
+# Bad bots
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Crawl-delay: 10
