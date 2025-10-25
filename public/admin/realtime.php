@@ -37,6 +37,17 @@ $activity_total_pages = ceil($activity_count / $per_page);
         .sidebar { min-height: 100vh; background: linear-gradient(180deg, #667eea 0%, #764ba2 100%); }
         .online-indicator { width: 10px; height: 10px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .stat-mini { padding: 1rem; border-radius: 12px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .stat-mini:hover { transform: translateY(-2px); }
+        .time-badge { font-size: 0.85rem; font-weight: 600; }
+        .event-badge { font-size: 0.75rem; font-weight: 600; padding: 0.35rem 0.6rem; }
+        .ip-badge { background: #f3f4f6; padding: 0.25rem 0.5rem; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.85rem; }
+        .location-text { font-size: 0.9rem; color: #6b7280; }
+        .page-link-text { font-size: 0.85rem; color: #4b5563; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .refresh-indicator { display: inline-block; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .filter-card { background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%); }
+        .activity-icon { font-size: 1.2rem; margin-right: 0.5rem; }
     </style>
 </head>
 <body>
@@ -45,20 +56,83 @@ $activity_total_pages = ceil($activity_count / $per_page);
         
         <div class="flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="mb-0">Real-time Activity</h2>
                 <div>
-                    <span class="badge bg-success">
-                        <span class="online-indicator d-inline-block me-1"></span>
-                        <span id="online-count"><?php echo get_online_users_count(); ?></span> Online
+                    <h2 class="mb-1">🔴 Live Activity Monitor</h2>
+                    <p class="text-muted mb-0">Real-time visitor tracking • Auto-refreshes every 10 seconds</p>
+                </div>
+                <div class="d-flex gap-2 align-items-center">
+                    <span class="badge bg-success" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                        <span class="online-indicator d-inline-block me-2"></span>
+                        <span id="online-count"><?php echo get_online_users_count(); ?></span> Online Now
                     </span>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="location.reload()" title="Refresh now">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="stat-mini">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small">Active Now</div>
+                                <h4 class="mb-0 fw-bold" id="stat-online"><?php echo get_online_users_count(); ?></h4>
+                            </div>
+                            <i class="bi bi-people-fill text-success" style="font-size: 2rem; opacity: 0.3;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-mini">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small">Last Hour</div>
+                                <h4 class="mb-0 fw-bold"><?php echo $activity_count; ?></h4>
+                            </div>
+                            <i class="bi bi-activity text-primary" style="font-size: 2rem; opacity: 0.3;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-mini">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small">Total Today</div>
+                                <h4 class="mb-0 fw-bold"><?php echo $conn->query("SELECT COUNT(DISTINCT session_id) as count FROM visitor_sessions WHERE DATE(first_visit) = CURDATE()")->fetch_assoc()['count']; ?></h4>
+                            </div>
+                            <i class="bi bi-calendar-check text-info" style="font-size: 2rem; opacity: 0.3;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-mini">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small">Avg. Duration</div>
+                                <h4 class="mb-0 fw-bold"><?php 
+                                $avg = $conn->query("SELECT AVG(total_duration_seconds) as avg FROM visitor_sessions WHERE last_activity >= DATE_SUB(NOW(), INTERVAL 1 HOUR)")->fetch_assoc()['avg'];
+                                echo $avg ? gmdate('i:s', $avg) : '0:00';
+                                ?></h4>
+                            </div>
+                            <i class="bi bi-clock-fill text-warning" style="font-size: 2rem; opacity: 0.3;"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
             
             <!-- Online Users -->
-            <div class="card mb-4">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="bi bi-people-fill me-2"></i>Currently Online</h5>
-                    <span class="text-muted">Showing <?php echo min($per_page, $online_count); ?> of <?php echo $online_count; ?></span>
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center" style="border-bottom: 2px solid #10b981;">
+                    <div>
+                        <h5 class="mb-1"><i class="bi bi-broadcast text-success me-2"></i>Live Visitors</h5>
+                        <small class="text-muted">People currently browsing your site</small>
+                    </div>
+                    <div class="text-end">
+                        <div class="text-muted small">Showing <?php echo min($per_page, $online_count); ?> of <?php echo $online_count; ?></div>
+                        <small class="text-success"><i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i> Active in last 5 minutes</small>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -92,13 +166,28 @@ $activity_total_pages = ceil($activity_count / $per_page);
                                     while($user = $online_users->fetch_assoc()):
                                 ?>
                                 <tr>
-                                    <td><code><?php echo htmlspecialchars($user['ip_address']); ?></code></td>
-                                    <td><?php echo htmlspecialchars($user['city'] . ', ' . $user['country_code']); ?></td>
-                                    <td><small><?php echo htmlspecialchars($user['current_page']); ?></small></td>
                                     <td>
-                                        <span class="badge bg-success">
+                                        <span class="ip-badge"><?php echo htmlspecialchars($user['ip_address']); ?></span>
+                                    </td>
+                                    <td>
+                                        <i class="bi bi-geo-alt-fill text-muted" style="font-size: 0.9rem;"></i>
+                                        <span class="location-text"><?php echo htmlspecialchars($user['city'] . ', ' . $user['country_code']); ?></span>
+                                    </td>
+                                    <td>
+                                        <div class="page-link-text" title="<?php echo htmlspecialchars($user['current_page']); ?>">
+                                            <i class="bi bi-file-text text-muted me-1"></i>
+                                            <?php echo htmlspecialchars($user['current_page']); ?>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        $seconds = $user['seconds_ago'];
+                                        $time_text = $seconds < 60 ? $seconds . 's' : floor($seconds/60) . 'm ' . ($seconds%60) . 's';
+                                        $badge_class = $seconds < 30 ? 'bg-success' : ($seconds < 120 ? 'bg-warning' : 'bg-secondary');
+                                        ?>
+                                        <span class="badge <?php echo $badge_class; ?> time-badge">
                                             <span class="online-indicator d-inline-block me-1"></span>
-                                            <?php echo $user['seconds_ago']; ?>s ago
+                                            <?php echo $time_text; ?> ago
                                         </span>
                                     </td>
                                 </tr>
@@ -107,7 +196,11 @@ $activity_total_pages = ceil($activity_count / $per_page);
                                 else:
                                 ?>
                                 <tr>
-                                    <td colspan="4" class="text-center text-muted py-4">No users currently online</td>
+                                    <td colspan="4" class="text-center py-5">
+                                        <i class="bi bi-person-x" style="font-size: 3rem; color: #d1d5db;"></i>
+                                        <p class="text-muted mt-2 mb-0">No visitors online right now</p>
+                                        <small class="text-muted">Wait for someone to visit your site...</small>
+                                    </td>
                                 </tr>
                                 <?php endif; ?>
                             </tbody>
@@ -136,10 +229,16 @@ $activity_total_pages = ceil($activity_count / $per_page);
             </div>
             
             <!-- Recent Activity -->
-            <div class="card">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="bi bi-activity me-2"></i>Recent Activity (Last Hour)</h5>
-                    <span class="text-muted">Showing <?php echo min($per_page, $activity_count); ?> of <?php echo $activity_count; ?></span>
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center" style="border-bottom: 2px solid #667eea;">
+                    <div>
+                        <h5 class="mb-1"><i class="bi bi-lightning-fill text-warning me-2"></i>Activity Feed</h5>
+                        <small class="text-muted">User interactions from the last hour</small>
+                    </div>
+                    <div class="text-end">
+                        <div class="text-muted small">Showing <?php echo min($per_page, $activity_count); ?> of <?php echo $activity_count; ?></div>
+                        <small class="text-primary"><i class="bi bi-clock-history"></i> Last 60 minutes</small>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -179,17 +278,56 @@ $activity_total_pages = ceil($activity_count / $per_page);
                                         }
                                 ?>
                                 <tr>
-                                    <td><span class="badge bg-<?php echo $badge_color; ?>"><?php echo htmlspecialchars($activity['event_type']); ?></span></td>
-                                    <td><code><?php echo htmlspecialchars($activity['ip_address']); ?></code></td>
-                                    <td><small><?php echo htmlspecialchars(substr($activity['element_text'], 0, 100)); ?></small></td>
-                                    <td><?php echo $activity['seconds_ago']; ?>s ago</td>
+                                    <td>
+                                        <span class="badge bg-<?php echo $badge_color; ?> event-badge">
+                                            <?php 
+                                            $icon = 'cursor';
+                                            switch($activity['event_type']) {
+                                                case 'click': $icon = 'cursor-fill'; break;
+                                                case 'scroll': $icon = 'arrows-expand'; break;
+                                                case 'form_focus': $icon = 'input-cursor-text'; break;
+                                                case 'page_exit': $icon = 'box-arrow-right'; break;
+                                            }
+                                            ?>
+                                            <i class="bi bi-<?php echo $icon; ?> me-1"></i>
+                                            <?php echo htmlspecialchars($activity['event_type']); ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="ip-badge"><?php echo htmlspecialchars($activity['ip_address']); ?></span>
+                                    </td>
+                                    <td>
+                                        <div style="max-width: 400px; overflow: hidden; text-overflow: ellipsis;" title="<?php echo htmlspecialchars($activity['element_text']); ?>">
+                                            <small><?php echo htmlspecialchars(substr($activity['element_text'], 0, 100)); ?></small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        $seconds = $activity['seconds_ago'];
+                                        if ($seconds < 60) {
+                                            $time_display = $seconds . 's ago';
+                                        } elseif ($seconds < 3600) {
+                                            $time_display = floor($seconds/60) . 'm ago';
+                                        } else {
+                                            $time_display = floor($seconds/3600) . 'h ago';
+                                        }
+                                        $text_color = $seconds < 300 ? 'text-success' : 'text-muted';
+                                        ?>
+                                        <span class="<?php echo $text_color; ?> fw-semibold" style="font-size: 0.9rem;">
+                                            <i class="bi bi-clock"></i> <?php echo $time_display; ?>
+                                        </span>
+                                    </td>
                                 </tr>
                                 <?php 
                                     endwhile;
                                 else:
                                 ?>
                                 <tr>
-                                    <td colspan="4" class="text-center text-muted py-4">No recent activity</td>
+                                    <td colspan="4" class="text-center py-5">
+                                        <i class="bi bi-inbox" style="font-size: 3rem; color: #d1d5db;"></i>
+                                        <p class="text-muted mt-2 mb-0">No activity in the last hour</p>
+                                        <small class="text-muted">Activity will appear here as users interact with your site</small>
+                                    </td>
                                 </tr>
                                 <?php endif; ?>
                             </tbody>
