@@ -3,14 +3,28 @@
  * Map Data API - City-level speed aggregation
  */
 
+// Suppress all errors and output valid JSON no matter what
+error_reporting(0);
+ini_set('display_errors', 0);
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-require_once __DIR__ . '/../lib/db.php';
-
-$conn = get_db_connection();
-
+// Initialize
+$conn = null;
 $cities = [];
+
+// Try database connection only if file exists
+if (file_exists(__DIR__ . '/../lib/db.php')) {
+    try {
+        @require_once __DIR__ . '/../lib/db.php';
+        if (function_exists('get_db_connection')) {
+            $conn = @get_db_connection();
+        }
+    } catch (Throwable $e) {
+        $conn = null;
+    }
+}
 
 // Major Pakistan cities with approximate relative coordinates
 $cityCoordinates = [
@@ -36,42 +50,48 @@ $cityCoordinates = [
     'Kasur' => ['x' => 0.74, 'y' => 0.33]
 ];
 
-// Try to get real data from database
-if ($conn) {
-    $result = $conn->query("
-        SELECT 
-            city,
-            COUNT(*) as test_count,
-            AVG(download_mbps) as avg_download,
-            AVG(upload_mbps) as avg_upload,
-            AVG(ping_ms) as avg_ping
-        FROM tests
-        WHERE DATE(ts) = CURDATE() AND city != 'Unknown'
-        GROUP BY city
-        ORDER BY test_count DESC
-        LIMIT 20
-    ");
-    
-    if ($result) {
-        while ($row = $result->fetch_assoc()) {
-            $cityName = $row['city'];
-            
-            // Get coordinates or use default
-            $coords = $cityCoordinates[$cityName] ?? [
-                'x' => 0.70 + (rand(-5, 5) / 100),
-                'y' => 0.50 + (rand(-30, 30) / 100)
-            ];
-            
-            $cities[] = [
-                'name' => $cityName,
-                'x' => $coords['x'],
-                'y' => $coords['y'],
-                'test_count' => (int)$row['test_count'],
-                'avg_download' => round((float)$row['avg_download'], 1),
-                'avg_upload' => round((float)$row['avg_upload'], 1),
-                'avg_ping' => round((float)$row['avg_ping'], 1)
-            ];
+// Try to get real data from database (with complete error suppression)
+if ($conn && is_object($conn)) {
+    try {
+        $result = @$conn->query("
+            SELECT 
+                city,
+                COUNT(*) as test_count,
+                AVG(download_mbps) as avg_download,
+                AVG(upload_mbps) as avg_upload,
+                AVG(ping_ms) as avg_ping
+            FROM tests
+            WHERE DATE(ts) = CURDATE() AND city != 'Unknown'
+            GROUP BY city
+            ORDER BY test_count DESC
+            LIMIT 20
+        ");
+        
+        if ($result && is_object($result)) {
+            while ($row = @$result->fetch_assoc()) {
+                if (!$row || !isset($row['city'])) continue;
+                
+                $cityName = $row['city'];
+                
+                // Get coordinates or use default
+                $coords = $cityCoordinates[$cityName] ?? [
+                    'x' => 0.70 + (rand(-5, 5) / 100),
+                    'y' => 0.50 + (rand(-30, 30) / 100)
+                ];
+                
+                $cities[] = [
+                    'name' => $cityName,
+                    'x' => $coords['x'],
+                    'y' => $coords['y'],
+                    'test_count' => (int)($row['test_count'] ?? 0),
+                    'avg_download' => round((float)($row['avg_download'] ?? 0), 1),
+                    'avg_upload' => round((float)($row['avg_upload'] ?? 0), 1),
+                    'avg_ping' => round((float)($row['avg_ping'] ?? 0), 1)
+                ];
+            }
         }
+    } catch (Throwable $e) {
+        // Any error = continue with empty array
     }
 }
 
