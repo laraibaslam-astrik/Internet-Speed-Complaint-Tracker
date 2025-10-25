@@ -659,7 +659,281 @@
         .animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
         .animate-delay-4 { animation-delay: 0.4s; opacity: 0; }
         
-        /* Mobile Responsiveness */
+        /* FUN ANIMATIONS - GPU ACCELERATED */
+        
+        /* Fade In Up Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Fade In Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Bounce Animation */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Pulse Animation */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Glow Animation */
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.8),
+                            0 0 40px rgba(102, 126, 234, 0.4);
+            }
+        }
+        
+        /* Shimmer Animation */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        /* Float Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        /* Rotate Glow */
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Scale In */
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Slide In Right */
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Slide In Left */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Apply Animations with Delays */
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .animate-fade-in-fast {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .animate-scale-in {
+            animation: scaleIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .animate-slide-right {
+            animation: slideInRight 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .animate-slide-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        /* Staggered Animation Delays */
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; }
+        
+        /* Continuous Animations */
+        .pulse-slow {
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        .bounce-slow {
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        .float-slow {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .glow-animate {
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        /* Card Hover Animations */
+        .card {
+            position: relative;
+            will-change: transform;
+        }
+        
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(102, 126, 234, 0.1),
+                transparent
+            );
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        
+        .card:hover::after {
+            transform: translateX(100%);
+        }
+        
+        /* Button Ripple Effect */
+        .btn {
+            position: relative;
+            overflow: hidden;
+            will-change: transform;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Metric Number Count Animation */
+        .metric-number {
+            display: inline-block;
+            will-change: transform;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-number:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Sparkline Canvas Animation */
+        canvas {
+            transition: opacity 0.3s ease;
+        }
+        
+        canvas:hover {
+            opacity: 0.8;
+        }
+        
+        /* Icon Animations */
+        .bi {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover .bi {
+            transform: scale(1.2) rotate(5deg);
+        }
+        
+        /* Progress Bar Animation */
+        .progress-bar {
+            animation: shimmer 2s linear infinite;
+            background: linear-gradient(
+                90deg,
+                var(--primary-color) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                var(--primary-color) 100%
+            );
+            background-size: 1000px 100%;
+            will-change: background-position;
+        }
+        
+        /* Navbar Logo Pulse */
+        .navbar-brand i {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* Speed Test Button Special Animation */
+        #btn-start-test {
+            animation: glow 2s ease-in-out infinite;
+            will-change: box-shadow;
+        }
+        
+        #btn-start-test:hover {
+            animation: pulse 0.5s ease-in-out infinite;
+        }
+        
+        /* Smooth Scroll Behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Mobile Responsiveness Improvements */
         @media (max-width: 768px) {
             .container {
                 padding-left: 1rem;

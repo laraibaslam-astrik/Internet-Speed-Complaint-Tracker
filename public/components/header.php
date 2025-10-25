@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" role="navigation" aria-label="Main navigation">
     <div class="container">
         <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
-            <div class="me-2" style="font-size: 1.75rem; animation: pulse 2s ease-in-out infinite;">
+            <div class="me-2 bounce-slow" style="font-size: 1.75rem;">
                 <i class="bi bi-speedometer2"></i>
             </div>
             <div>

@@ -1,5 +1,5 @@
 <!-- Pakistan Heatmap Section -->
-<section class="py-5" style="background: transparent;">
+<section class="py-5 animate-fade-in delay-500" style="background: transparent;">
     <div class="container">
         <div class="mb-4 text-center">
             <div class="d-inline-block px-4 py-2 rounded-3" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);">

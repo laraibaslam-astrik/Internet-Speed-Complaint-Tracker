@@ -124,13 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </form>
         
-        <div class="text-center mt-4">
-            <small class="text-muted">
-                Default: admin / admin123<br>
-                <strong class="text-danger">Change password immediately!</strong>
-            </small>
-        </div>
-        
         <div class="text-center mt-3">
             <a href="/" class="text-decoration-none">
                 <i class="bi bi-arrow-left me-1"></i>Back to Website
