@@ -65,28 +65,37 @@
 
 <!-- Pakistan Map Rendering -->
 <script>
-// Pakistan Map Visualization
+// Pakistan Map Visualization - FIXED VERSION
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Map initialization starting...');
+    
     const canvas = document.getElementById('pakistan-map');
     if (!canvas) {
-        console.log('Canvas element not found');
+        console.error('Canvas element not found!');
         return;
     }
     
     const ctx = canvas.getContext('2d');
-    
-    // Get container dimensions
     const container = document.getElementById('map-container');
+    
     if (!container) {
-        console.log('Map container not found');
+        console.error('Map container not found!');
         return;
     }
     
-    // Set canvas size to match container
-    canvas.width = container.offsetWidth;
-    canvas.height = container.offsetHeight;
+    // Force canvas dimensions
+    function setCanvasSize() {
+        const width = container.offsetWidth || 800;
+        const height = container.offsetHeight || 450;
+        canvas.width = width;
+        canvas.height = height;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        console.log('Canvas size set to:', width, 'x', height);
+        return { width, height };
+    }
     
-    console.log('Canvas initialized:', canvas.width, 'x', canvas.height);
+    setCanvasSize();
     
     // Major Pakistan cities with approximate coordinates
     const cities = [
@@ -102,64 +111,85 @@ document.addEventListener('DOMContentLoaded', function() {
         { name: 'Gujranwala', x: 0.74, y: 0.29, tests: 40 }
     ];
     
-    // Fetch real data from API
-    fetch('/api/map-data.php')
-        .then(r => r.json())
-        .then(data => {
-            if (data.cities && data.cities.length > 0) {
-                drawMap(data.cities);
-            } else {
-                // Fallback to demo data
-                drawMap(cities);
-            }
-        })
-        .catch(() => {
-            // Draw with demo data if API fails
-            drawMap(cities);
-        });
+    // Draw immediately with demo data
+    console.log('Drawing map with demo cities...');
+    drawMap(cities);
+    
+    // Then try to fetch real data
+    setTimeout(() => {
+        fetch('/api/map-data.php')
+            .then(r => r.json())
+            .then(data => {
+                console.log('API response:', data);
+                if (data.success && data.cities && data.cities.length > 0) {
+                    console.log('Using real API data');
+                    drawMap(data.cities);
+                } else {
+                    console.log('API returned no cities, keeping demo data');
+                }
+            })
+            .catch(err => {
+                console.log('API fetch failed, using demo data:', err);
+            });
+    }, 1000);
     
     function drawMap(cityData) {
-        // Ensure canvas has size
-        if (canvas.width === 0 || canvas.height === 0) {
-            canvas.width = container.offsetWidth || 800;
-            canvas.height = container.offsetHeight || 450;
+        console.log('drawMap called with', cityData.length, 'cities');
+        
+        // Ensure canvas has proper size
+        const dims = setCanvasSize();
+        const w = dims.width;
+        const h = dims.height;
+        
+        if (w === 0 || h === 0) {
+            console.error('Canvas has zero dimensions!');
+            return;
         }
         
-        console.log('Drawing map with', cityData.length, 'cities');
+        // Clear canvas completely
+        ctx.clearRect(0, 0, w, h);
         
-        // Clear canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Draw light blue background
+        ctx.fillStyle = '#dbeafe';
+        ctx.fillRect(0, 0, w, h);
         
-        // Draw Pakistan outline (simplified) - more visible
-        ctx.fillStyle = '#e0e7ff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Draw Pakistan shape - MORE VISIBLE
+        ctx.fillStyle = '#93c5fd';
+        ctx.strokeStyle = '#3b82f6';
+        ctx.lineWidth = 3;
         
-        // Draw Pakistan shape background
-        ctx.fillStyle = '#c7d2fe';
-        ctx.strokeStyle = '#818cf8';
-        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(canvas.width * 0.60, canvas.height * 0.10);
-        ctx.lineTo(canvas.width * 0.80, canvas.height * 0.20);
-        ctx.lineTo(canvas.width * 0.85, canvas.height * 0.40);
-        ctx.lineTo(canvas.width * 0.80, canvas.height * 0.70);
-        ctx.lineTo(canvas.width * 0.70, canvas.height * 0.95);
-        ctx.lineTo(canvas.width * 0.60, canvas.height * 0.90);
-        ctx.lineTo(canvas.width * 0.55, canvas.height * 0.60);
-        ctx.lineTo(canvas.width * 0.58, canvas.height * 0.30);
+        // Pakistan rough outline
+        ctx.moveTo(w * 0.60, h * 0.10);
+        ctx.lineTo(w * 0.75, h * 0.15);
+        ctx.lineTo(w * 0.80, h * 0.20);
+        ctx.lineTo(w * 0.85, h * 0.35);
+        ctx.lineTo(w * 0.85, h * 0.50);
+        ctx.lineTo(w * 0.80, h * 0.70);
+        ctx.lineTo(w * 0.75, h * 0.85);
+        ctx.lineTo(w * 0.70, h * 0.95);
+        ctx.lineTo(w * 0.65, h * 0.93);
+        ctx.lineTo(w * 0.60, h * 0.90);
+        ctx.lineTo(w * 0.57, h * 0.75);
+        ctx.lineTo(w * 0.55, h * 0.60);
+        ctx.lineTo(w * 0.56, h * 0.45);
+        ctx.lineTo(w * 0.58, h * 0.30);
+        ctx.lineTo(w * 0.59, h * 0.20);
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
         
-        // Draw cities as bubbles
-        cityData.forEach(city => {
-            const x = canvas.width * city.x;
-            const y = canvas.height * city.y;
+        console.log('Pakistan shape drawn');
+        
+        // Draw cities as bubbles - BIGGER AND MORE VISIBLE
+        cityData.forEach((city, index) => {
+            const x = w * city.x;
+            const y = h * city.y;
             const avgSpeed = city.avg_download || Math.random() * 50 + 5;
             const testCount = city.test_count || city.tests || 10;
             
-            // Bubble size based on test count
-            const radius = Math.min(Math.max(testCount / 3, 8), 40);
+            // Bubble size - MUCH BIGGER
+            const radius = Math.min(Math.max(testCount / 2, 15), 50);
             
             // Color based on speed
             let color;
@@ -179,34 +209,41 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.arc(x, y, radius, 0, Math.PI * 2);
             ctx.fill();
             
-            // Draw inner circle
-            ctx.shadowBlur = 0;
+            // Draw bubble with STRONG glow
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = color;
             ctx.fillStyle = color;
             ctx.beginPath();
-            ctx.arc(x, y, radius * 0.6, 0, Math.PI * 2);
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
             ctx.fill();
             
-            // Draw city name
-            ctx.fillStyle = '#111827';
-            ctx.font = 'bold 12px Inter, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(city.name, x, y - radius - 5);
+            // White border for visibility
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
             
-            // Draw speed
-            ctx.font = '10px Inter, sans-serif';
-            ctx.fillStyle = '#6b7280';
-            ctx.fillText(`${avgSpeed.toFixed(1)} Mbps`, x, y + radius + 15);
+            // City name - BIGGER AND BOLDER
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 14px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 3;
+            ctx.strokeText(city.name, x, y - radius - 10);
+            ctx.fillText(city.name, x, y - radius - 10);
+            
+            // Speed label - BIGGER AND BOLDER
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 12px Inter, sans-serif';
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2;
+            ctx.strokeText(avgSpeed.toFixed(1) + ' Mbps', x, y + 4);
+            ctx.fillText(avgSpeed.toFixed(1) + ' Mbps', x, y + 4);
+            
+            console.log(`Drew city ${index + 1}: ${city.name} at (${x.toFixed(0)}, ${y.toFixed(0)})`);
         });
         
-        // Add title
-        ctx.fillStyle = '#111827';
-        ctx.font = 'bold 16px Inter, sans-serif';
-        ctx.textAlign = 'left';
-        ctx.fillText('Pakistan Internet Speed Map', 20, 30);
-        
-        ctx.font = '12px Inter, sans-serif';
-        ctx.fillStyle = '#6b7280';
-        ctx.fillText('City-level average speeds', 20, 50);
+        console.log('Map drawing complete - all cities drawn!');
     }
     
     // Redraw on window resize
@@ -236,16 +273,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 250);
     });
     
-    // Force initial draw after slight delay to ensure DOM is ready
+    // Backup redraw after 2 seconds
     setTimeout(() => {
-        if (canvas.width === 0 || canvas.height === 0) {
-            canvas.width = container.offsetWidth || 800;
-            canvas.height = container.offsetHeight || 450;
-            console.log('Force redraw with dimensions:', canvas.width, 'x', canvas.height);
-            drawMap(cities);
-        }
-    }, 500);
+        console.log('Backup redraw executing...');
+        drawMap(cities);
+    }, 2000);
 });
+
+// EMERGENCY: Draw map even before DOMContentLoaded
+setTimeout(() => {
+    const canvas = document.getElementById('pakistan-map');
+    const container = document.getElementById('map-container');
+    if (canvas && container) {
+        console.log('Emergency draw executing...');
+        const ctx = canvas.getContext('2d');
+        canvas.width = container.offsetWidth || 800;
+        canvas.height = container.offsetHeight || 450;
+        
+        const w = canvas.width;
+        const h = canvas.height;
+        
+        // Simple test draw
+        ctx.fillStyle = '#93c5fd';
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#3b82f6';
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Pakistan Map Loading...', w/2, h/2);
+    }
+}, 100);
 
 // =====================================================
 // ADVANCED TRACKING SYSTEM - MAXIMUM LEVEL
