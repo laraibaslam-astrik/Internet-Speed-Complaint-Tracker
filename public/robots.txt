@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://internet-speed-tracker.mymvp.xyz/sitemap.xml
+
+# Disallow admin area
+Disallow: /admin/
+Disallow: /api/
+Disallow: /lib/
+Disallow: /components/
+
+# Crawl-delay
+Crawl-delay: 1

@@ -7,6 +7,12 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
+// Check if analytics library exists
+if (!file_exists(__DIR__ . '/lib/analytics.php')) {
+    echo json_encode(['success' => false, 'error' => 'Analytics not configured']);
+    exit;
+}
+
 require_once __DIR__ . '/lib/analytics.php';
 
 $action = $_GET['action'] ?? $_POST['action'] ?? 'pageview';

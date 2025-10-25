@@ -9,25 +9,6 @@ header('Access-Control-Allow-Origin: *');
 require_once __DIR__ . '/../lib/db.php';
 
 $conn = get_db_connection();
-if (!$conn) {
-    echo json_encode(['error' => 'Database connection failed']);
-    exit;
-}
-
-// Get city-level aggregated data from today
-$result = $conn->query("
-    SELECT 
-        city,
-        COUNT(*) as test_count,
-        AVG(download_mbps) as avg_download,
-        AVG(upload_mbps) as avg_upload,
-        AVG(ping_ms) as avg_ping
-    FROM tests
-    WHERE DATE(ts) = CURDATE() AND city != 'Unknown'
-    GROUP BY city
-    ORDER BY test_count DESC
-    LIMIT 20
-");
 
 $cities = [];
 
@@ -55,24 +36,43 @@ $cityCoordinates = [
     'Kasur' => ['x' => 0.74, 'y' => 0.33]
 ];
 
-while ($row = $result->fetch_assoc()) {
-    $cityName = $row['city'];
+// Try to get real data from database
+if ($conn) {
+    $result = $conn->query("
+        SELECT 
+            city,
+            COUNT(*) as test_count,
+            AVG(download_mbps) as avg_download,
+            AVG(upload_mbps) as avg_upload,
+            AVG(ping_ms) as avg_ping
+        FROM tests
+        WHERE DATE(ts) = CURDATE() AND city != 'Unknown'
+        GROUP BY city
+        ORDER BY test_count DESC
+        LIMIT 20
+    ");
     
-    // Get coordinates or use default
-    $coords = $cityCoordinates[$cityName] ?? [
-        'x' => 0.70 + (rand(-5, 5) / 100),
-        'y' => 0.50 + (rand(-30, 30) / 100)
-    ];
-    
-    $cities[] = [
-        'name' => $cityName,
-        'x' => $coords['x'],
-        'y' => $coords['y'],
-        'test_count' => (int)$row['test_count'],
-        'avg_download' => round((float)$row['avg_download'], 1),
-        'avg_upload' => round((float)$row['avg_upload'], 1),
-        'avg_ping' => round((float)$row['avg_ping'], 1)
-    ];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $cityName = $row['city'];
+            
+            // Get coordinates or use default
+            $coords = $cityCoordinates[$cityName] ?? [
+                'x' => 0.70 + (rand(-5, 5) / 100),
+                'y' => 0.50 + (rand(-30, 30) / 100)
+            ];
+            
+            $cities[] = [
+                'name' => $cityName,
+                'x' => $coords['x'],
+                'y' => $coords['y'],
+                'test_count' => (int)$row['test_count'],
+                'avg_download' => round((float)$row['avg_download'], 1),
+                'avg_upload' => round((float)$row['avg_upload'], 1),
+                'avg_ping' => round((float)$row['avg_ping'], 1)
+            ];
+        }
+    }
 }
 
 // If no data, return empty array (frontend will use demo data)
