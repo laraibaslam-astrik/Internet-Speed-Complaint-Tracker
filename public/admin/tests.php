@@ -28,8 +28,15 @@ $tests = $conn->query("SELECT * FROM tests ORDER BY ts DESC LIMIT $per_page OFFS
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
-        body { background: #f8f9fa; }
+        body { background: #f8f9fa; color: #000000 !important; }
+        body * { color: #000000 !important; }
         .sidebar { min-height: 100vh; background: linear-gradient(180deg, #667eea 0%, #764ba2 100%); }
+        .sidebar * { color: #ffffff !important; }
+        .card { border-radius: 12px; }
+        h2, h3, h4, h5, h6 { color: #000000 !important; font-weight: 700; }
+        .table { color: #000000 !important; }
+        .table th, .table td { color: #000000 !important; }
+        thead { background: #f8f9fa !important; }
     </style>
 </head>
 <body>
@@ -37,11 +44,11 @@ $tests = $conn->query("SELECT * FROM tests ORDER BY ts DESC LIMIT $per_page OFFS
         <?php include 'sidebar.php'; ?>
         
         <div class="flex-grow-1 p-4">
-            <h2 class="mb-4">All Speed Tests</h2>
+            <h2 class="mb-4" style="color: #000000 !important;">📊 All Speed Tests</h2>
             
             <div class="card">
                 <div class="card-header bg-white">
-                    <strong>Total: <?php echo number_format($total); ?> tests</strong>
+                    <strong style="color: #000000 !important;">Total: <?php echo number_format($total); ?> tests</strong>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -61,14 +68,14 @@ $tests = $conn->query("SELECT * FROM tests ORDER BY ts DESC LIMIT $per_page OFFS
                             <tbody>
                                 <?php while($test = $tests->fetch_assoc()): ?>
                                 <tr>
-                                    <td><?php echo date('M d, H:i', strtotime($test['ts'])); ?></td>
-                                    <td><code><?php echo htmlspecialchars(substr($test['ip'], 0, 15)); ?></code></td>
-                                    <td><?php echo htmlspecialchars($test['city']); ?></td>
-                                    <td><small><?php echo htmlspecialchars($test['isp']); ?></small></td>
-                                    <td><strong><?php echo number_format($test['download_mbps'], 1); ?></strong> Mbps</td>
-                                    <td><strong><?php echo number_format($test['upload_mbps'], 1); ?></strong> Mbps</td>
-                                    <td><?php echo number_format($test['ping_ms'], 0); ?> ms</td>
-                                    <td><?php echo number_format($test['jitter_ms'], 1); ?> ms</td>
+                                    <td style="color: #000000 !important;"><?php echo date('M d, H:i', strtotime($test['ts'])); ?></td>
+                                    <td><code style="color: #667eea !important;"><?php echo htmlspecialchars(substr($test['hash_ip'], 0, 15)); ?></code></td>
+                                    <td style="color: #000000 !important;"><?php echo htmlspecialchars($test['city']); ?></td>
+                                    <td style="color: #000000 !important;"><strong><?php echo htmlspecialchars($test['isp_name'] ?? 'Unknown'); ?></strong></td>
+                                    <td style="color: #000000 !important;"><strong><?php echo number_format($test['dl_mbps'], 1); ?></strong> Mbps</td>
+                                    <td style="color: #000000 !important;"><strong><?php echo number_format($test['ul_mbps'], 1); ?></strong> Mbps</td>
+                                    <td style="color: #000000 !important;"><?php echo number_format($test['ping_ms'], 0); ?> ms</td>
+                                    <td style="color: #000000 !important;"><?php echo number_format($test['jitter_ms'], 1); ?> ms</td>
                                 </tr>
                                 <?php endwhile; ?>
                             </tbody>

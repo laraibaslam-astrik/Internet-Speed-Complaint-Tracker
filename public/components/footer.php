@@ -37,13 +37,13 @@
         </div>
         <hr style="border-color: rgba(255,255,255,0.1);">
         <div class="text-center">
-            <p class="mb-2">
-                <span data-en="Made for Pakistan " data-ur="پاکستان کے لیے بنایا گیا ">Made for Pakistan </span>
+            <p class="mb-2" style="color: #ffffff !important;">
+                <span style="color: #ffffff !important;" data-en="Made for Pakistan " data-ur="پاکستان کے لیے بنایا گیا ">Made for Pakistan </span>
             </p>
-            <p class="small mb-0" style="color: rgba(255,255,255,0.7);">
-                <span data-en=" 2025 Pakistan Internet Speed Tracker. All rights reserved." data-ur=" 2025 پاکستان انٹرنیٹ رفتار ٹریکر۔ تمام حقوق محفوظ ہیں۔"> 2025 Pakistan Internet Speed Tracker. All rights reserved.</span>
+            <p class="small mb-0" style="color: rgba(255,255,255,0.9) !important;">
+                <span style="color: rgba(255,255,255,0.9) !important;" data-en=" 2025 Pakistan Internet Speed Tracker. All rights reserved." data-ur=" 2025 پاکستان انٹرنیٹ رفتار ٹریکر۔ تمام حقوق محفوظ ہیں۔"> 2025 Pakistan Internet Speed Tracker. All rights reserved.</span>
             </p>
-            <p class="small mt-2" style="color: rgba(255,255,255,0.5);">
+            <p class="small mt-2" style="color: rgba(255,255,255,0.7) !important;">
                 Keywords: Pakistan speed test, PTCL speed test, Nayatel speed test, StormFiber, Internet speed Karachi, Lahore, Islamabad
             </p>
         </div>

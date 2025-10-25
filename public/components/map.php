@@ -8,8 +8,8 @@
                     <span data-en="Pakistan Internet Speed Map" data-ur="پاکستان انٹرنیٹ رفتار نقشہ">Pakistan Internet Speed Map</span>
                 </h3>
             </div>
-            <p style="color: #000000; margin: 0; font-weight: 700; font-size: 1rem;">
-                <span data-en="Real-time speed data across major cities" data-ur="بڑے شہروں میں حقیقی وقت کی رفتار کا ڈیٹا">Real-time speed data across major cities</span>
+            <p style="color: #000000 !important; margin: 0; font-weight: 800 !important; font-size: 1.1rem !important;">
+                <span style="color: #000000 !important;" data-en="Real-time speed data across major cities" data-ur="بڑے شہروں میں حقیقی وقت کی رفتار کا ڈیٹا">Real-time speed data across major cities</span>
             </p>
         </div>
         

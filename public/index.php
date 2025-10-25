@@ -139,9 +139,10 @@
         }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f8f9fa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #f8fafc 100%);
             min-height: 100vh;
+            color: #000000 !important;
         }
         
         @media (prefers-color-scheme: dark) {
@@ -570,8 +571,13 @@
         
         /* Perfect text contrast */
         .text-muted {
-            color: #334155 !important;
-            font-weight: 600 !important;
+            color: #000000 !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Override Bootstrap defaults */
+        .text-secondary, .text-muted, .text-dark {
+            color: #000000 !important;
         }
         
         strong, .fw-bold {
@@ -598,7 +604,11 @@
         }
         
         .card-body {
-            color: #1e293b !important;
+            color: #000000 !important;
+        }
+        
+        .card-body * {
+            color: #000000 !important;
         }
         
         /* Labels */
@@ -607,9 +617,13 @@
             font-weight: 700 !important;
         }
         
-        /* Body text */
-        body, p, span, div {
-            color: #1e293b;
+        /* Body text - MAXIMUM CONTRAST */
+        body, p, span, div, label, a {
+            color: #000000 !important;
+        }
+        
+        body * {
+            color: #000000 !important;
         }
         
         /* Metric labels */
