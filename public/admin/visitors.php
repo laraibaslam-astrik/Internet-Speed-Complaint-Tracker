@@ -132,9 +132,9 @@ $visitors = $stmt->get_result();
                                 <tr class="visitor-row">
                                     <td><code><?php echo htmlspecialchars($v['ip_address']); ?></code></td>
                                     <td><?php echo htmlspecialchars($v['city'] . ', ' . $v['country_code']); ?></td>
-                                    <td><small><?php echo htmlspecialchars($v['isp_name']); ?></small></td>
-                                    <td><?php echo htmlspecialchars($v['device_type'] . ' / ' . $v['browser']); ?></td>
-                                    <td><?php echo date('M d, H:i', strtotime($v['first_visit'])); ?></td>
+                                    <td><small><?php echo htmlspecialchars($v['isp_name'] ?: 'Unknown'); ?></small></td>
+                                    <td><small><?php echo htmlspecialchars($v['device_type'] . ' / ' . $v['browser']); ?></small></td>
+                                    <td><small><?php echo date('M d, H:i', strtotime($v['first_visit'])); ?></small></td>
                                     <td><span class="badge bg-secondary"><?php echo $v['total_pageviews']; ?></span></td>
                                     <td>
                                         <a href="visitor_detail.php?id=<?php echo $v['id']; ?>" class="btn btn-sm btn-primary">View</a>

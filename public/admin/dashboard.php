@@ -43,6 +43,15 @@ $stats['total_tests'] = $result->fetch_assoc()['count'];
 // Today's tests
 $result = $conn->query("SELECT COUNT(*) as count FROM tests WHERE DATE(ts) = CURDATE()");
 $stats['today_tests'] = $result->fetch_assoc()['count'];
+
+// Pagination for recent visitors
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$per_page = 20;
+$offset = ($page - 1) * $per_page;
+
+// Get total recent visitors count
+$total_visitors = $conn->query("SELECT COUNT(*) as count FROM visitor_sessions")->fetch_assoc()['count'];
+$total_pages = ceil($total_visitors / $per_page);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -150,7 +159,10 @@ $stats['today_tests'] = $result->fetch_assoc()['count'];
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0"><i class="bi bi-people-fill me-2"></i>Recent Visitors</h5>
-                    <a href="visitors.php" class="btn btn-sm btn-outline-primary">View All</a>
+                    <div class="d-flex gap-2 align-items-center">
+                        <span class="text-muted small">Showing <?php echo min($per_page, $total_visitors); ?> of <?php echo number_format($total_visitors); ?></span>
+                        <a href="visitors.php" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -176,7 +188,7 @@ $stats['today_tests'] = $result->fetch_assoc()['count'];
                                     LEFT JOIN online_users ou ON vs.session_id = ou.session_id 
                                         AND ou.last_ping >= DATE_SUB(NOW(), INTERVAL 5 MINUTE)
                                     ORDER BY vs.last_activity DESC
-                                    LIMIT 20
+                                    LIMIT $per_page OFFSET $offset
                                 ");
                                 
                                 while ($visitor = $result->fetch_assoc()):
@@ -217,6 +229,45 @@ $stats['today_tests'] = $result->fetch_assoc()['count'];
                         </table>
                     </div>
                 </div>
+                <?php if ($total_pages > 1): ?>
+                <div class="card-footer bg-white">
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0 justify-content-center">
+                            <?php if ($page > 1): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<?php echo $page - 1; ?>">Previous</a>
+                            </li>
+                            <?php endif; ?>
+                            
+                            <?php 
+                            $start = max(1, $page - 2);
+                            $end = min($total_pages, $page + 2);
+                            
+                            if ($start > 1): ?>
+                                <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                                <?php if ($start > 2): ?><li class="page-item disabled"><span class="page-link">...</span></li><?php endif; ?>
+                            <?php endif; ?>
+                            
+                            <?php for($i = $start; $i <= $end; $i++): ?>
+                            <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                            </li>
+                            <?php endfor; ?>
+                            
+                            <?php if ($end < $total_pages): ?>
+                                <?php if ($end < $total_pages - 1): ?><li class="page-item disabled"><span class="page-link">...</span></li><?php endif; ?>
+                                <li class="page-item"><a class="page-link" href="?page=<?php echo $total_pages; ?>"><?php echo $total_pages; ?></a></li>
+                            <?php endif; ?>
+                            
+                            <?php if ($page < $total_pages): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<?php echo $page + 1; ?>">Next</a>
+                            </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+                <?php endif; ?>
             </div>
             
             <!-- Charts Row -->

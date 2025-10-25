@@ -8,6 +8,21 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/analytics.php';
 $conn = get_db_connection();
+
+// Pagination parameters
+$online_page = isset($_GET['online_page']) ? max(1, (int)$_GET['online_page']) : 1;
+$activity_page = isset($_GET['activity_page']) ? max(1, (int)$_GET['activity_page']) : 1;
+$per_page = 20;
+
+// Get online users count
+$online_count = get_online_users_count();
+$online_offset = ($online_page - 1) * $per_page;
+$online_total_pages = ceil($online_count / $per_page);
+
+// Get activity count
+$activity_count = $conn->query("SELECT COUNT(*) as count FROM click_events WHERE event_timestamp >= DATE_SUB(NOW(), INTERVAL 1 HOUR)")->fetch_assoc()['count'];
+$activity_offset = ($activity_page - 1) * $per_page;
+$activity_total_pages = ceil($activity_count / $per_page);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,92 +56,197 @@ $conn = get_db_connection();
             
             <!-- Online Users -->
             <div class="card mb-4">
-                <div class="card-header bg-white">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0"><i class="bi bi-people-fill me-2"></i>Currently Online</h5>
+                    <span class="text-muted">Showing <?php echo min($per_page, $online_count); ?> of <?php echo $online_count; ?></span>
                 </div>
                 <div class="card-body p-0">
-                    <div id="online-users" class="table-responsive">
-                        <!-- Will be populated by JavaScript -->
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>IP Address</th>
+                                    <th>Location</th>
+                                    <th>Current Page</th>
+                                    <th>Last Active</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $online_users = $conn->query("
+                                    SELECT 
+                                        vs.ip_address,
+                                        vs.city,
+                                        vs.country_code,
+                                        ou.current_page,
+                                        ou.last_ping,
+                                        TIMESTAMPDIFF(SECOND, ou.last_ping, NOW()) as seconds_ago
+                                    FROM online_users ou
+                                    JOIN visitor_sessions vs ON ou.session_id = vs.session_id
+                                    WHERE ou.last_ping >= DATE_SUB(NOW(), INTERVAL 5 MINUTE)
+                                    ORDER BY ou.last_ping DESC
+                                    LIMIT $per_page OFFSET $online_offset
+                                ");
+                                
+                                if ($online_users->num_rows > 0):
+                                    while($user = $online_users->fetch_assoc()):
+                                ?>
+                                <tr>
+                                    <td><code><?php echo htmlspecialchars($user['ip_address']); ?></code></td>
+                                    <td><?php echo htmlspecialchars($user['city'] . ', ' . $user['country_code']); ?></td>
+                                    <td><small><?php echo htmlspecialchars($user['current_page']); ?></small></td>
+                                    <td>
+                                        <span class="badge bg-success">
+                                            <span class="online-indicator d-inline-block me-1"></span>
+                                            <?php echo $user['seconds_ago']; ?>s ago
+                                        </span>
+                                    </td>
+                                </tr>
+                                <?php 
+                                    endwhile;
+                                else:
+                                ?>
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">No users currently online</td>
+                                </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+                <?php if ($online_total_pages > 1): ?>
+                <div class="card-footer bg-white">
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+                            <?php for($i = 1; $i <= min($online_total_pages, 10); $i++): ?>
+                            <li class="page-item <?php echo $i === $online_page ? 'active' : ''; ?>">
+                                <a class="page-link" href="?online_page=<?php echo $i; ?>&activity_page=<?php echo $activity_page; ?>"><?php echo $i; ?></a>
+                            </li>
+                            <?php endfor; ?>
+                            <?php if ($online_total_pages > 10): ?>
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                            <li class="page-item">
+                                <a class="page-link" href="?online_page=<?php echo $online_total_pages; ?>&activity_page=<?php echo $activity_page; ?>"><?php echo $online_total_pages; ?></a>
+                            </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+                <?php endif; ?>
             </div>
             
             <!-- Recent Activity -->
             <div class="card">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0"><i class="bi bi-activity me-2"></i>Recent Activity</h5>
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-activity me-2"></i>Recent Activity (Last Hour)</h5>
+                    <span class="text-muted">Showing <?php echo min($per_page, $activity_count); ?> of <?php echo $activity_count; ?></span>
                 </div>
                 <div class="card-body p-0">
-                    <div id="recent-activity" class="table-responsive">
-                        <!-- Will be populated by JavaScript -->
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Event Type</th>
+                                    <th>User (IP)</th>
+                                    <th>Details</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $activities = $conn->query("
+                                    SELECT 
+                                        ce.event_type,
+                                        ce.element_text,
+                                        ce.event_timestamp,
+                                        vs.ip_address,
+                                        TIMESTAMPDIFF(SECOND, ce.event_timestamp, NOW()) as seconds_ago
+                                    FROM click_events ce
+                                    JOIN visitor_sessions vs ON ce.session_id = vs.session_id
+                                    WHERE ce.event_timestamp >= DATE_SUB(NOW(), INTERVAL 1 HOUR)
+                                    ORDER BY ce.event_timestamp DESC
+                                    LIMIT $per_page OFFSET $activity_offset
+                                ");
+                                
+                                if ($activities->num_rows > 0):
+                                    while($activity = $activities->fetch_assoc()):
+                                        $badge_color = 'secondary';
+                                        switch($activity['event_type']) {
+                                            case 'click': $badge_color = 'primary'; break;
+                                            case 'scroll': $badge_color = 'info'; break;
+                                            case 'form_focus': $badge_color = 'warning'; break;
+                                            case 'page_exit': $badge_color = 'danger'; break;
+                                        }
+                                ?>
+                                <tr>
+                                    <td><span class="badge bg-<?php echo $badge_color; ?>"><?php echo htmlspecialchars($activity['event_type']); ?></span></td>
+                                    <td><code><?php echo htmlspecialchars($activity['ip_address']); ?></code></td>
+                                    <td><small><?php echo htmlspecialchars(substr($activity['element_text'], 0, 100)); ?></small></td>
+                                    <td><?php echo $activity['seconds_ago']; ?>s ago</td>
+                                </tr>
+                                <?php 
+                                    endwhile;
+                                else:
+                                ?>
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">No recent activity</td>
+                                </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+                <?php if ($activity_total_pages > 1): ?>
+                <div class="card-footer bg-white">
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+                            <?php for($i = 1; $i <= min($activity_total_pages, 10); $i++): ?>
+                            <li class="page-item <?php echo $i === $activity_page ? 'active' : ''; ?>">
+                                <a class="page-link" href="?online_page=<?php echo $online_page; ?>&activity_page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                            </li>
+                            <?php endfor; ?>
+                            <?php if ($activity_total_pages > 10): ?>
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                            <li class="page-item">
+                                <a class="page-link" href="?online_page=<?php echo $online_page; ?>&activity_page=<?php echo $activity_total_pages; ?>"><?php echo $activity_total_pages; ?></a>
+                            </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
     
     <script>
-    function loadOnlineUsers() {
-        fetch('api/realtime_data.php?type=online')
+    // Update online count badge only
+    function updateOnlineCount() {
+        fetch('api/realtime_data.php?type=online_count')
             .then(r => r.json())
             .then(data => {
                 document.getElementById('online-count').textContent = data.count || 0;
-                
-                let html = '<table class="table table-hover mb-0"><thead class="table-light"><tr><th>IP</th><th>Location</th><th>Page</th><th>Last Active</th></tr></thead><tbody>';
-                
-                if (data.users && data.users.length > 0) {
-                    data.users.forEach(user => {
-                        html += `<tr>
-                            <td><code>${user.ip_address}</code></td>
-                            <td>${user.city}, ${user.country_code}</td>
-                            <td><small>${user.current_page}</small></td>
-                            <td>${user.last_ping_relative}</td>
-                        </tr>`;
-                    });
-                } else {
-                    html += '<tr><td colspan="4" class="text-center text-muted">No users online</td></tr>';
-                }
-                
-                html += '</tbody></table>';
-                document.getElementById('online-users').innerHTML = html;
             })
-            .catch(e => console.error('Error loading online users:', e));
+            .catch(e => console.error('Error updating count:', e));
     }
     
-    function loadRecentActivity() {
-        fetch('api/realtime_data.php?type=activity')
-            .then(r => r.json())
-            .then(data => {
-                let html = '<table class="table table-hover mb-0"><thead class="table-light"><tr><th>Event</th><th>User</th><th>Details</th><th>Time</th></tr></thead><tbody>';
-                
-                if (data.events && data.events.length > 0) {
-                    data.events.forEach(event => {
-                        html += `<tr>
-                            <td><span class="badge bg-primary">${event.event_type}</span></td>
-                            <td><small><code>${event.ip_address}</code></small></td>
-                            <td><small>${event.element_text || '-'}</small></td>
-                            <td>${event.time_relative}</td>
-                        </tr>`;
-                    });
-                } else {
-                    html += '<tr><td colspan="4" class="text-center text-muted">No recent activity</td></tr>';
-                }
-                
-                html += '</tbody></table>';
-                document.getElementById('recent-activity').innerHTML = html;
-            })
-            .catch(e => console.error('Error loading activity:', e));
+    // Auto-refresh page every 10 seconds to show new data
+    let autoRefreshInterval;
+    function startAutoRefresh() {
+        // Update count every 3 seconds
+        setInterval(updateOnlineCount, 3000);
+        
+        // Full page refresh every 10 seconds
+        autoRefreshInterval = setInterval(() => {
+            window.location.reload();
+        }, 10000);
     }
     
-    // Load initially
-    loadOnlineUsers();
-    loadRecentActivity();
+    // Start auto-refresh
+    startAutoRefresh();
     
-    // Refresh every 3 seconds
-    setInterval(() => {
-        loadOnlineUsers();
-        loadRecentActivity();
-    }, 3000);
+    // Update count immediately
+    updateOnlineCount();
     </script>
 </body>
 </html>

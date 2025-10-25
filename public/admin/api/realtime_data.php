@@ -13,7 +13,24 @@ $conn = get_db_connection();
 
 $type = $_GET['type'] ?? 'online';
 
-if ($type === 'online') {
+if ($type === 'online_count') {
+    // Just return the count
+    $count = 0;
+    $result = $conn->query("
+        SELECT COUNT(*) as count
+        FROM online_users
+        WHERE last_ping >= DATE_SUB(NOW(), INTERVAL 5 MINUTE)
+    ");
+    if ($result) {
+        $count = $result->fetch_assoc()['count'];
+    }
+    
+    echo json_encode([
+        'success' => true,
+        'count' => $count
+    ]);
+    
+} elseif ($type === 'online') {
     // Get online users
     $result = $conn->query("
         SELECT 
