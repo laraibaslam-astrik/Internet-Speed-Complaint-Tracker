@@ -13,7 +13,7 @@
             </p>
         </div>
         
-        <div class="card shadow-lg" style="border-radius: 16px; overflow: hidden; border: 1px solid #e5e7eb;">
+        <div class="card shadow-lg animate-fade-in" style="border-radius: 24px; overflow: hidden; border: 1px solid rgba(102, 126, 234, 0.2);">
             <div class="card-body p-0">
                 <!-- Simple canvas-based bubble map -->
                 <div id="map-container" style="position: relative; width: 100%; height: 450px; background: #e0e7ff; min-height: 300px;">

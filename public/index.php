@@ -45,6 +45,16 @@
     <!-- Favicon & App Icons -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PK Speed Test">
+    <meta name="application-name" content="Pakistan Speed Test">
+    <meta name="msapplication-TileColor" content="#667eea">
+    <meta name="msapplication-config" content="/browserconfig.xml">
     
     <!-- Structured Data / JSON-LD -->
     <script type="application/ld+json">
@@ -115,20 +125,17 @@
     
     <style>
         :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --primary-color: #667eea;
-            --primary-dark: #5568d3;
-            --secondary-color: #764ba2;
             --success-color: #10b981;
-            --warning-color: #f59e0b;
             --danger-color: #ef4444;
-            --info-color: #06b6d4;
-            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
-            --shadow-xl: 0 20px 60px rgba(0,0,0,0.25);
+            --warning-color: #f59e0b;
+            --dark-text: #0f172a;
+        }
+        
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         body {
@@ -179,25 +186,24 @@
             }
         }
         
-        /* Gradient Button */
+        /* Enhanced Warning Button */
         .btn-warning {
-            background: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
             border: none;
-            color: white;
-            font-weight: 600;
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
-            transition: all 0.3s ease;
+            color: #0f172a;
+            font-weight: 900;
+            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.5);
         }
         
         .btn-warning:hover:not(:disabled) {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 6px 25px rgba(245, 158, 11, 0.6);
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #ffffff;
+            transform: translateY(-4px) scale(1.08);
+            box-shadow: 0 20px 30px -5px rgba(245, 158, 11, 0.7);
         }
         
         .btn-warning:active {
-            transform: translateY(0) scale(0.98);
+            transform: translateY(-1px) scale(1.02);
         }
         
         /* Enhanced Cards */
@@ -224,7 +230,8 @@
         
         .card:hover {
             transform: translateY(-8px) scale(1.02);
-            box-shadow: var(--shadow-xl);
+            box-shadow: 0 20px 25px -5px rgba(102, 126, 234, 0.2), 0 25px 50px -12px rgba(102, 126, 234, 0.3);
+            border-color: rgba(102, 126, 234, 0.4);
         }
         
         .card:hover::before {
@@ -243,14 +250,42 @@
             .display-4 {
                 font-size: 2.25rem;
             }
-        }
-        
-        /* Metric Labels with Icons */
-        .card-body .text-muted {
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.75rem;
+            .btn {
+                border-radius: 16px;
+                padding: 14px 32px;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                transition: all 0.4s ease;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+            }
+            
+            .btn::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: translate(-50%, -50%);
+                transition: width 0.6s, height 0.6s;
+            }
+            
+            .btn:hover::before {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .btn:hover {
+                transform: translateY(-3px) scale(1.05);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            }
+            
+            .btn:active {
+                transform: translateY(-1px) scale(1.02);
+            }
         }
         
         /* Enhanced Progress Bar */
@@ -513,79 +548,134 @@
             color: #d97706 !important;
         }
         
-        /* MAXIMUM Text Contrast - Super Visible */
+        /* PROFESSIONAL Typography - Maximum Readability */
+        h1, h2, h3, h4, h5, h6 {
+            color: #0f172a !important;
+            font-weight: 800 !important;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        
+        h1 {
+            font-size: 2.5rem !important;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        h3 {
+            font-size: 1.75rem !important;
+        }
+        
+        /* Perfect text contrast */
         .text-muted {
-            color: #1f2937 !important;
+            color: #334155 !important;
             font-weight: 600 !important;
         }
         
         strong, .fw-bold {
-            color: #000000 !important;
+            color: #0f172a !important;
             font-weight: 800 !important;
         }
         
-        /* Metric numbers - Maximum visibility */
+        /* Metric numbers - Ultra visible */
         .display-4 {
-            color: #000000 !important;
+            color: #0f172a !important;
             font-weight: 900 !important;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            font-size: 3.5rem !important;
+            letter-spacing: -0.04em;
+            text-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
         }
         
-        /* Card text - Very dark */
+        /* Card text hierarchy */
         .card-body .small {
-            color: #111827 !important;
+            color: #0f172a !important;
             font-weight: 700 !important;
+            font-size: 0.875rem !important;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
         }
         
-        /* All text very dark */
         .card-body {
-            color: #111827 !important;
+            color: #1e293b !important;
         }
         
-        /* Ensure all important text is readable */
-        h1, h2, h3, h4, h5, h6 {
-            color: #000000 !important;
-            font-weight: 700 !important;
-        }
-        
-        /* Card labels */
+        /* Labels */
         .card .small, .card small {
-            color: #1f2937 !important;
+            color: #0f172a !important;
             font-weight: 700 !important;
         }
         
-        /* All body text */
+        /* Body text */
         body, p, span, div {
-            color: #111827;
+            color: #1e293b;
         }
         
-        /* Metric card specific */
-        .card-body .d-flex .small {
-            color: #000000 !important;
-            font-weight: 700 !important;
+        /* Metric labels */
+        .metric-label {
+            color: #0f172a !important;
+            font-weight: 800 !important;
+            font-size: 1rem !important;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
         
-        /* Make Mbps/ms labels darker */
-        .card-body div[class*="small"] {
-            color: #000000 !important;
-            font-weight: 700 !important;
-            font-size: 0.95rem !important;
+        /* Unit labels */
+        .unit-label {
+            color: #0f172a !important;
+            font-weight: 800 !important;
+            font-size: 1.1rem !important;
         }
         
-        /* Mobile Responsiveness Improvements */
+        /* Professional Spacing */
+        .container {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        
+        section {
+            margin-bottom: 4rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .animate-delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .animate-delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
+        .animate-delay-4 { animation-delay: 0.4s; opacity: 0; }
+        
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .container {
                 padding-left: 1rem;
                 padding-right: 1rem;
             }
             
-            /* Smaller heading on mobile */
             h1 {
-                font-size: 1.75rem !important;
+                font-size: 2rem !important;
             }
             
             h2, h3 {
                 font-size: 1.5rem !important;
+            }
+            
+            .display-4 {
+                font-size: 2.5rem !important;
             }
             
             /* Stack metric cards vertically */

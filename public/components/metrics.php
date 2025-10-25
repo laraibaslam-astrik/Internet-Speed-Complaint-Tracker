@@ -33,12 +33,12 @@
                         <i class="bi bi-arrow-down-circle-fill"></i>
                     </div>
                     <div class="card-body text-center position-relative">
-                        <div class="mb-3 d-flex align-items-center justify-content-center gap-2" style="color: #000000; font-weight: 700; font-size: 1rem;">
-                            <i class="bi bi-download" style="font-size: 1.1rem; color: #4f46e5;"></i>
+                        <div class="mb-3 d-flex align-items-center justify-content-center gap-2 metric-label" style="color: #0f172a; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.08em;">
+                            <i class="bi bi-download" style="font-size: 1.3rem; color: #4f46e5;"></i>
                             <span data-en="Download" data-ur="ڈاؤن لوڈ">Download</span>
                         </div>
-                        <div class="display-4 fw-bold text-primary mb-2" id="metric-download" style="color: #000000 !important; font-weight: 900 !important;">--</div>
-                        <div class="small mb-3" style="color: #000000; font-weight: 800; font-size: 1rem;">Mbps</div>
+                        <div class="display-4 fw-bold mb-2" id="metric-download" style="color: #0f172a !important; font-weight: 900 !important; font-size: 3.5rem !important; letter-spacing: -0.04em; text-shadow: 0 2px 8px rgba(79, 70, 229, 0.15);">--</div>
+                        <div class="unit-label mb-3" style="color: #0f172a; font-weight: 800; font-size: 1.15rem; letter-spacing: 0.05em;">Mbps</div>
                         <canvas id="spark-download" width="100" height="30" class="mt-2" aria-hidden="true"></canvas>
                     </div>
                 </div>
@@ -51,12 +51,12 @@
                         <i class="bi bi-arrow-up-circle-fill"></i>
                     </div>
                     <div class="card-body text-center position-relative">
-                        <div class="mb-3 d-flex align-items-center justify-content-center gap-2" style="color: #000000; font-weight: 700; font-size: 1rem;">
-                            <i class="bi bi-upload" style="font-size: 1.1rem; color: #059669;"></i>
+                        <div class="mb-3 d-flex align-items-center justify-content-center gap-2 metric-label" style="color: #0f172a; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.08em;">
+                            <i class="bi bi-upload" style="font-size: 1.3rem; color: #059669;"></i>
                             <span data-en="Upload" data-ur="اپ لوڈ">Upload</span>
                         </div>
-                        <div class="display-4 fw-bold text-success mb-2" id="metric-upload" style="color: #000000 !important; font-weight: 900 !important;">--</div>
-                        <div class="small mb-3" style="color: #000000; font-weight: 800; font-size: 1rem;">Mbps</div>
+                        <div class="display-4 fw-bold mb-2" id="metric-upload" style="color: #0f172a !important; font-weight: 900 !important; font-size: 3.5rem !important; letter-spacing: -0.04em; text-shadow: 0 2px 8px rgba(5, 150, 105, 0.15);">--</div>
+                        <div class="unit-label mb-3" style="color: #0f172a; font-weight: 800; font-size: 1.15rem; letter-spacing: 0.05em;">Mbps</div>
                         <canvas id="spark-upload" width="100" height="30" class="mt-2" aria-hidden="true"></canvas>
                     </div>
                 </div>
@@ -69,12 +69,12 @@
                         <i class="bi bi-clock-fill"></i>
                     </div>
                     <div class="card-body text-center position-relative">
-                        <div class="mb-3 d-flex align-items-center justify-content-center gap-2" style="color: #000000; font-weight: 700; font-size: 1rem;">
-                            <i class="bi bi-clock" style="font-size: 1.1rem; color: #0891b2;"></i>
+                        <div class="mb-3 d-flex align-items-center justify-content-center gap-2 metric-label" style="color: #0f172a; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.08em;">
+                            <i class="bi bi-clock" style="font-size: 1.3rem; color: #0891b2;"></i>
                             <span data-en="Ping" data-ur="پنگ">Ping</span>
                         </div>
-                        <div class="display-4 fw-bold text-info mb-2" id="metric-ping" style="color: #000000 !important; font-weight: 900 !important;">--</div>
-                        <div class="small mb-3" style="color: #000000; font-weight: 800; font-size: 1rem;">ms</div>
+                        <div class="display-4 fw-bold mb-2" id="metric-ping" style="color: #0f172a !important; font-weight: 900 !important; font-size: 3.5rem !important; letter-spacing: -0.04em; text-shadow: 0 2px 8px rgba(8, 145, 178, 0.15);">--</div>
+                        <div class="unit-label mb-3" style="color: #0f172a; font-weight: 800; font-size: 1.15rem; letter-spacing: 0.05em;">ms</div>
                         <canvas id="spark-ping" width="100" height="30" class="mt-2" aria-hidden="true"></canvas>
                     </div>
                 </div>
@@ -87,12 +87,12 @@
                         <i class="bi bi-activity"></i>
                     </div>
                     <div class="card-body text-center position-relative">
-                        <div class="mb-3 d-flex align-items-center justify-content-center gap-2" style="color: #000000; font-weight: 700; font-size: 1rem;">
-                            <i class="bi bi-activity" style="font-size: 1.1rem; color: #d97706;"></i>
+                        <div class="mb-3 d-flex align-items-center justify-content-center gap-2 metric-label" style="color: #0f172a; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.08em;">
+                            <i class="bi bi-activity" style="font-size: 1.3rem; color: #d97706;"></i>
                             <span data-en="Jitter" data-ur="جٹر">Jitter</span>
                         </div>
-                        <div class="display-4 fw-bold text-warning mb-2" id="metric-jitter" style="color: #000000 !important; font-weight: 900 !important;">--</div>
-                        <div class="small mb-3" style="color: #000000; font-weight: 800; font-size: 1rem;">ms</div>
+                        <div class="display-4 fw-bold mb-2" id="metric-jitter" style="color: #0f172a !important; font-weight: 900 !important; font-size: 3.5rem !important; letter-spacing: -0.04em; text-shadow: 0 2px 8px rgba(217, 119, 6, 0.15);">--</div>
+                        <div class="unit-label mb-3" style="color: #0f172a; font-weight: 800; font-size: 1.15rem; letter-spacing: 0.05em;">ms</div>
                         <canvas id="spark-jitter" width="100" height="30" class="mt-2" aria-hidden="true"></canvas>
                     </div>
                 </div>
